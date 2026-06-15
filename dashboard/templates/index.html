@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Manufacturing Dashboard</title>
+    <meta name="description" content="AI 기반 제조 공정 모니터링 및 품질 예측 대시보드">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div>
+                <h2>Smart Manufacturing</h2>
+                <p>제조 공정 모니터링</p>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="메뉴 열기"><i class="fas fa-bars"></i></button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="active" onclick="showSection('overview', event)">
+                <i class="fas fa-chart-pie icon"></i> 대시보드
+            </a>
+            <a href="#" onclick="showSection('equipment', event)">
+                <i class="fas fa-cogs icon"></i> 설비 상태
+            </a>
+            <a href="#" onclick="showSection('analysis', event)">
+                <i class="fas fa-table icon"></i> 데이터 분석
+            </a>
+            <a href="#" onclick="showSection('anomalies', event)">
+                <i class="fas fa-exclamation-triangle icon"></i> 이상 탐지
+            </a>
+            <a href="#" onclick="showSection('drift', event)">
+                <i class="fas fa-chart-line icon"></i> 드리프트
+            </a>
+            <a href="#" onclick="showSection('rul', event)">
+                <i class="fas fa-clock icon"></i> RUL 예측
+            </a>
+            <a href="#" onclick="showSection('visualizations', event)">
+                <i class="fas fa-image icon"></i> 시각화
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div id="section-overview" class="section">
+            <div class="page-header">
+                <h1>대시보드</h1>
+                <p>실시간 제조 공정 모니터링</p>
+            </div>
+            <div class="update-time" id="update-time-overview"></div>
+
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <div class="label">총 데이터</div>
+                    <div class="value" id="stat-total">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">불량률</div>
+                    <div class="value" id="stat-defect">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">평균 온도</div>
+                    <div class="value" id="stat-temp">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">평균 압력</div>
+                    <div class="value" id="stat-pressure">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">평균 습도</div>
+                    <div class="value" id="stat-humidity">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">평균 사이클 시간</div>
+                    <div class="value" id="stat-cycle">-</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="chart-card">
+                    <h3>시간대별 불량률</h3>
+                    <div class="chart-container">
+                        <canvas id="chart-hourly"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>라인별 불량률</h3>
+                    <div class="chart-container">
+                        <canvas id="chart-lines"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-equipment" class="section" style="display:none;">
+            <div class="page-header">
+                <h1>설비 상태</h1>
+                <p>설비 건강 상태 및 알림</p>
+            </div>
+            <div class="update-time" id="update-time-equipment"></div>
+            <div class="chart-card">
+                <div class="loading-text" id="loading-equipment">데이터를 불러오는 중...</div>
+                <div class="table-container" id="equipment-table-container" style="display:none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>설비 ID</th>
+                                <th>건강 점수</th>
+                                <th>상태</th>
+                                <th>알림</th>
+                            </tr>
+                        </thead>
+                        <tbody id="equipment-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-analysis" class="section" style="display:none;">
+            <div class="page-header">
+                <h1>데이터 분석</h1>
+                <p>변수 간 상관관계 및 분포</p>
+            </div>
+            <div class="update-time" id="update-time-analysis"></div>
+            <div class="chart-card">
+                <h3>상관관계 매트릭스</h3>
+                <div class="heatmap-container" id="heatmap-container"></div>
+            </div>
+            <div class="chart-card">
+                <h3>온도-진동 분포</h3>
+                <div class="chart-container">
+                    <canvas id="chart-scatter"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-anomalies" class="section" style="display:none;">
+            <div class="page-header">
+                <h1>이상 탐지</h1>
+                <p>비정상 데이터 패턴 탐지</p>
+            </div>
+            <div class="update-time" id="update-time-anomalies"></div>
+            <div class="stats-grid" id="anomaly-stats"></div>
+            <div class="chart-card">
+                <h3>상위 이상 데이터</h3>
+                <div class="loading-text" id="loading-anomalies" style="display:none;">데이터를 불러오는 중...</div>
+                <div class="table-container" id="anomaly-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>라인</th>
+                                <th>온도</th>
+                                <th>압력</th>
+                                <th>진동</th>
+                                <th>이상 점수</th>
+                            </tr>
+                        </thead>
+                        <tbody id="anomaly-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-drift" class="section" style="display:none;">
+            <div class="page-header">
+                <h1>데이터 드리프트 감지</h1>
+                <p>KS test + PSI 기반 분포 변화 모니터링</p>
+            </div>
+            <div class="update-time" id="update-time-drift"></div>
+            <div class="loading-text" id="loading-drift" style="display:none;">드리프트 분석 중...</div>
+            <div class="stats-grid" id="drift-stats"></div>
+            <div class="chart-card">
+                <h3>특성별 드리프트 결과</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>특성</th>
+                                <th>KS p-value</th>
+                                <th>KS 결과</th>
+                                <th>PSI</th>
+                                <th>PSI 결과</th>
+                                <th>종합</th>
+                            </tr>
+                        </thead>
+                        <tbody id="drift-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-rul" class="section" style="display:none;">
+            <div class="page-header">
+                <h1>잔여 수명 예측 (RUL)</h1>
+                <p>설비 신뢰도 기반 정비 일정</p>
+            </div>
+            <div class="update-time" id="update-time-rul"></div>
+            <div class="chart-card">
+                <div class="loading-text" id="loading-rul" style="display:none;">데이터를 불러오는 중...</div>
+                <div class="table-container" id="rul-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>설비 ID</th>
+                                <th>건강 점수</th>
+                                <th>신뢰도 점수</th>
+                                <th>잔여 수명 (시간)</th>
+                                <th>권장 정비일</th>
+                                <th>신뢰도</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rul-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-visualizations" class="section" style="display:none;">
+            <div class="page-header">
+                <h1>정적 시각화</h1>
+                <p>생성된 시각화 이미지 갤러리</p>
+            </div>
+            <div class="update-time" id="update-time-visualizations"></div>
+            <div class="loading-text" id="loading-visualizations" style="display:none;">이미지를 불러오는 중...</div>
+            <div id="visualization-gallery" class="grid-2"></div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+services:
+  app:
+    build: .
+    container_name: manufacturing-sim-app
+    command: python main.py
+    restart: "no"
+    volumes:
+      - manufacturing_data:/app/data
+      - manufacturing_models:/app/models
+      - manufacturing_visualizations:/app/visualizations
+
+  dashboard:
+    build: .
+    container_name: manufacturing-sim-dashboard
+    ports:
+      - "5000:5000"
+    command: python dashboard/app.py
+    restart: unless-stopped
+    volumes:
+      - manufacturing_data:/app/data
+      - manufacturing_models:/app/models
+      - manufacturing_visualizations:/app/visualizations
+
+volumes:
+  manufacturing_data:
+  manufacturing_models:
+  manufacturing_visualizations:

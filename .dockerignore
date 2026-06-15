@@ -1,0 +1,27 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Version control
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Project outputs (generated at runtime)
+data/
+models/
+visualizations/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db

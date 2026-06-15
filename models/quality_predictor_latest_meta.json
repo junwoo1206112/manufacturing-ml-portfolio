@@ -1,0 +1,8 @@
+{
+  "name": "anomaly",
+  "version": "20260615_165639",
+  "saved_at": "2026-06-15T16:56:39.635630",
+  "model_type": "IsolationForest",
+  "model_path": "C:\\Users\\admin\\AppData\\Local\\Temp\\tmpptp5e12a\\anomaly_v20260615_165639.joblib",
+  "schema_version": "2.0"
+}

@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+venv/
+.venv/
+
+# Generated data (keep representative sample)
+data/*
+!data/manufacturing_data.csv
+
+# Models (keep latest alias only)
+models/*
+!models/quality_predictor_latest.joblib
+!models/quality_predictor_latest_meta.json
+
+# Visualizations (auto-generated)
+visualizations/*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

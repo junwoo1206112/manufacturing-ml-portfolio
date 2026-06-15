@@ -1,0 +1,40 @@
+[
+  {
+    "id": "CNC_001",
+    "name": "CNC 머시닝 센터 1",
+    "sensors": {"vibration": 0.45, "temperature": 28, "pressure": 98},
+    "failure_history": [
+      {"date": "2026-01-15", "interval": 800},
+      {"date": "2026-03-20", "interval": 750},
+      {"date": "2026-05-10", "interval": 780}
+    ],
+    "usage_hours": 700
+  },
+  {
+    "id": "CNC_002",
+    "name": "CNC 머시닝 센터 2",
+    "sensors": {"vibration": 0.72, "temperature": 33, "pressure": 105},
+    "failure_history": [
+      {"date": "2026-02-10", "interval": 820},
+      {"date": "2026-04-15", "interval": 790}
+    ],
+    "usage_hours": 650
+  },
+  {
+    "id": "PRESS_001",
+    "name": "프레스 기계 1",
+    "sensors": {"vibration": 0.3, "temperature": 25, "pressure": 115},
+    "failure_history": [
+      {"date": "2026-01-25", "interval": 900},
+      {"date": "2026-05-01", "interval": 850}
+    ],
+    "usage_hours": 500
+  },
+  {
+    "id": "ROBOT_001",
+    "name": "로봇 팔 1",
+    "sensors": {"vibration": 0.55, "temperature": 30, "pressure": 100},
+    "failure_history": [],
+    "usage_hours": 400
+  }
+]

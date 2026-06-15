@@ -1,0 +1,71 @@
+# Smart Manufacturing Simulation Portfolio
+# 설정 파일
+
+data:
+  num_records: 5000
+  start_date: "2026-01-01"
+  random_seed: 42
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+production_lines:
+  Line_A:
+    name: "전자부품 라인"
+    temp_range: [22, 38]
+    pressure_range: [95, 115]
+    vibration_range: [0.3, 0.9]
+    humidity_range: [45, 75]
+    cycle_time_range: [25, 40]
+    defect_baseline: 0.04
+  Line_B:
+    name: "기계부품 라인"
+    temp_range: [18, 32]
+    pressure_range: [100, 125]
+    vibration_range: [0.2, 0.7]
+    humidity_range: [40, 65]
+    cycle_time_range: [30, 50]
+    defect_baseline: 0.03
+  Line_C:
+    name: "소비재 라인"
+    temp_range: [20, 35]
+    pressure_range: [90, 110]
+    vibration_range: [0.4, 0.8]
+    humidity_range: [50, 80]
+    cycle_time_range: [20, 35]
+    defect_baseline: 0.05
+
+thresholds:
+  vibration:
+    warning: 0.6
+    critical: 0.8
+  temperature:
+    warning: 32
+    critical: 38
+  pressure:
+    warning: 110
+    critical: 120
+
+ml:
+  test_size: 0.2
+  random_state: 42
+  cv_folds: 5
+  models:
+    random_forest:
+      n_estimators: 100
+      max_depth: 10
+    gradient_boosting:
+      n_estimators: 100
+      learning_rate: 0.1
+    logistic_regression:
+      max_iter: 1000
+
+drift:
+  ks_alpha: 0.05
+  psi_threshold: 0.1
+  reference_window: 5000
+
+dashboard:
+  port: 5001
+  host: "0.0.0.0"
+  debug: true
