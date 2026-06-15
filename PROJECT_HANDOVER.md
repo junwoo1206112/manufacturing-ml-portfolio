@@ -10,7 +10,7 @@
 | Field | Value |
 |---|---|
 | **Project** | Smart Manufacturing Simulation Portfolio |
-| **Target** | 소르테크 지원 포트폴리오 |
+| **Target** | 제조 AI 포트폴리오 |
 | **Python** | 3.12 |
 | **Key libs** | scikit-learn, pandas, numpy, matplotlib, seaborn, Flask, SHAP |
 | **Test framework** | pytest (72 tests, all passing) |

@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-> 제조 공정 데이터 분석 및 예측 AI 시스템 — 소르테크 지원용 포트폴리오
+> 제조 공정 데이터 분석 및 예측 AI 포트폴리오
 
 ---
 
