@@ -1,8 +1,17 @@
 # Smart Manufacturing Simulation Portfolio
 
-[![CI](https://github.com/junwoo1206112/manufacturing-ml-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/junwoo1206112/manufacturing-ml-portfolio/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
+
+## 20초 요약
+
+> **문제** — 합성 제조 센서 데이터에서 불량 조기 탐지와 공정 이상 모니터링을 재현했습니다.
+>
+> **구현** — 누수 방지 분할, RandomForest·Isolation Forest, SHAP, KS/PSI 드리프트 감지와 Flask 대시보드를 Docker 파이프라인으로 구성했습니다.
+>
+> **결과** — 대표 실행에서 불량 F1 **0.59**, PR-AUC **0.66**을 기록했습니다. 합성 데이터 기반 결과이므로 실제 생산 라인 성능을 주장하지 않습니다.
+>
+> **실행** — [Docker·로컬 실행 방법](#quick-start)으로 전체 파이프라인과 대시보드를 재현할 수 있습니다.
 
 > 제조 공정 데이터 분석 및 예측 AI 포트폴리오
 
