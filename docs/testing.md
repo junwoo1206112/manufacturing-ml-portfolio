@@ -2,7 +2,7 @@
 
 ## 개요
 
-pytest 기반, **78개 테스트**, 별도 설정 파일 없이 기본 설정으로 동작합니다.
+pytest 기반, **86개 테스트**, 별도 설정 파일 없이 기본 설정으로 동작합니다.
 
 ## 기본 실행
 
@@ -76,7 +76,7 @@ pytest --cov=src --cov-report=term-missing
 | test_visualizer.py | ~1초 | 시각화 생성 |
 | test_dashboard.py | <1초 | Flask API 응답 |
 | test_extended.py | ~1초 | 확장 시각화 |
-| **전체** | **~12초** | 78개 테스트 |
+| **전체** | **~12초** | 86개 테스트 |
 
 ## 테스트가 실패할 경우
 
@@ -111,7 +111,7 @@ python dashboard/app.py
 
 ```yaml
 steps:
-  - pip install -r requirements.txt
+  - pip install -r requirements-tested.txt
   - pytest -v --tb=short
 ```
 

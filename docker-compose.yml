@@ -14,7 +14,7 @@ services:
     container_name: manufacturing-sim-dashboard
     ports:
       - "5000:5000"
-    command: python dashboard/app.py
+    command: python dashboard/app.py 5000
     restart: unless-stopped
     volumes:
       - manufacturing_data:/app/data

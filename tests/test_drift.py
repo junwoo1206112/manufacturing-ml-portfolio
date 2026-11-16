@@ -89,3 +89,10 @@ class TestDriftDetector:
 
         report = detector.detect(reference_df, live_df)
         assert report["drift_detected"] is False
+
+    def test_psi_handles_constant_reference_feature(self, detector: DriftDetector):
+        reference = pd.DataFrame({"temperature": [25.0] * 20})
+        live = pd.DataFrame({"temperature": [30.0] * 20})
+        result = detector.psi(reference, live)
+        assert "temperature" in result
+        assert result["temperature"]["psi"] >= 0.0

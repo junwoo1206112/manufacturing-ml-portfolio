@@ -44,6 +44,13 @@ class TestQualityPredictor:
         assert "accuracy" in metrics
         assert "f1_1" in metrics
 
+    def test_timestamped_dataframe_uses_chronological_split(self):
+        predictor = QualityPredictor()
+        metrics, (X_test, _) = predictor.train(self.df)
+        assert "accuracy" in metrics
+        assert predictor.training_config["split_strategy"] == "chronological"
+        assert X_test.index.min() >= int(len(self.df) * 0.70)
+
     def test_predict(self):
         predictor = QualityPredictor()
         X, y = predictor.prepare_data(self.df)

@@ -30,7 +30,7 @@ source venv/bin/activate
 ### 3. 의존성 설치
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-tested.txt
 ```
 
 ### 4. 개발 의존성 설치 (선택)
@@ -105,7 +105,7 @@ pytest tests/ -v
 ```
 manufacturing-simulation-portfolio/
 ├── README.md              # 프로젝트 설명
-├── requirements.txt       # 필요 라이브러리
+├── requirements-tested.txt # 검증된 정확한 런타임 버전
 ├── main.py                # 메인 실행 파일
 ├── Dockerfile             # 컨테이너 이미지
 ├── docker-compose.yml     # app + dashboard 서비스
@@ -131,7 +131,7 @@ manufacturing-simulation-portfolio/
 │   ├── app.py
 │   ├── templates/
 │   └── static/
-├── tests/                 # 78개 테스트
+├── tests/                 # 86개 테스트
 ├── docs/                  # 문서
 ├── data/                  # 생성 데이터 (auto)
 ├── models/                # 학습 모델 (auto)

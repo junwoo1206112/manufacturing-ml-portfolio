@@ -76,7 +76,7 @@ class DataPipeline:
 
         if "timestamp" in df.columns:
             df["hour"] = pd.to_datetime(df["timestamp"]).dt.hour
-            df["day_of_week"] = pd.to_datetime(df["timestamp"]).dt.dayofweek
+            df["day_of_week"] = pd.to_datetime(df["timestamp"]).dt.day_of_week
             df["is_night"] = df["hour"].apply(lambda x: 1 if x < 6 or x > 22 else 0)
 
         if "temperature" in df.columns and "pressure" in df.columns:
@@ -213,6 +213,14 @@ class DataPipeline:
 
 
 def prepare_training_data(df: pd.DataFrame) -> Dict[str, Any]:
+    """Prepare exploratory, randomly split features outside the production training path.
+
+    ``main.py`` deliberately trains ``QualityPredictor`` on timestamped raw
+    sensor observations so it can preserve a chronological train/validation/
+    test split.  This utility remains available for notebook-style feature
+    exploration and its own unit tests; its output must not be presented as
+    the model-evaluation input.
+    """
     pipeline = DataPipeline()
     return pipeline.prepare(df)
 

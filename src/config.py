@@ -90,6 +90,10 @@ DEFAULT_DRIFT_CONFIG: Dict[str, Any] = {
     "reference_window": 5000,
 }
 
+DEFAULT_HISTORY_CONFIG: Dict[str, Any] = {
+    "database_path": "data/manufacturing_history.db",
+}
+
 
 def _load_yaml_config(path: Path) -> Dict[str, Any]:
     if not path.exists():
@@ -132,8 +136,10 @@ THRESHOLDS = _deep_merge(DEFAULT_THRESHOLDS, raw_config.get("thresholds"))
 ML_CONFIG = _deep_merge(DEFAULT_ML_CONFIG, raw_config.get("ml"))
 DASHBOARD_CONFIG = _deep_merge(DEFAULT_DASHBOARD_CONFIG, raw_config.get("dashboard"))
 DRIFT_CONFIG = _deep_merge(DEFAULT_DRIFT_CONFIG, raw_config.get("drift"))
+HISTORY_CONFIG = _deep_merge(DEFAULT_HISTORY_CONFIG, raw_config.get("history"))
 
 DATA_FILE = DATA_DIR / "manufacturing_data.csv"
 EQUIPMENT_FILE = CONFIG_DIR / "equipment.json"
 LATEST_MODEL_PATH = MODELS_DIR / "quality_predictor_latest.joblib"
 LATEST_MODEL_META_PATH = MODELS_DIR / "quality_predictor_latest_meta.json"
+HISTORY_DATABASE_PATH = BASE_DIR / HISTORY_CONFIG["database_path"]

@@ -182,23 +182,46 @@ class QualityPredictor:
         X: Union[pd.DataFrame, np.ndarray],
         y: Optional[Union[pd.Series, np.ndarray]] = None,
     ) -> Tuple[Dict[str, Any], Tuple[pd.DataFrame, pd.Series]]:
+        split_strategy = "stratified_random"
+        timestamps: Optional[pd.Series] = None
         if y is None and isinstance(X, pd.DataFrame):
+            if "timestamp" in X.columns:
+                parsed_timestamps = pd.to_datetime(X["timestamp"], errors="coerce")
+                if parsed_timestamps.notna().all():
+                    timestamps = parsed_timestamps
             X, y = self.prepare_data(X)
 
-        X_train, X_temp, y_train, y_temp = train_test_split(
-            X,
-            y,
-            test_size=0.3,
-            random_state=ML_CONFIG["random_state"],
-            stratify=y,
-        )
-        X_val, X_test, y_val, y_test = train_test_split(
-            X_temp,
-            y_temp,
-            test_size=0.5,
-            random_state=ML_CONFIG["random_state"],
-            stratify=y_temp,
-        )
+        if timestamps is not None:
+            # Manufacturing observations arrive over time.  Sorting before the
+            # split prevents future sensor values from leaking into training.
+            ordered = pd.DataFrame({"timestamp": timestamps}, index=X.index).sort_values("timestamp")
+            ordered_index = ordered.index
+            n_train = int(len(ordered_index) * 0.70)
+            n_validation_end = n_train + int(len(ordered_index) * 0.15)
+            if n_train == 0 or n_validation_end >= len(ordered_index):
+                raise ValueError("At least seven timestamped observations are required for a chronological split")
+            train_index = ordered_index[:n_train]
+            validation_index = ordered_index[n_train:n_validation_end]
+            test_index = ordered_index[n_validation_end:]
+            X_train, y_train = X.loc[train_index], y.loc[train_index]
+            X_val, y_val = X.loc[validation_index], y.loc[validation_index]
+            X_test, y_test = X.loc[test_index], y.loc[test_index]
+            split_strategy = "chronological"
+        else:
+            X_train, X_temp, y_train, y_temp = train_test_split(
+                X,
+                y,
+                test_size=0.3,
+                random_state=ML_CONFIG["random_state"],
+                stratify=y,
+            )
+            X_val, X_test, y_val, y_test = train_test_split(
+                X_temp,
+                y_temp,
+                test_size=0.5,
+                random_state=ML_CONFIG["random_state"],
+                stratify=y_temp,
+            )
 
         self._fit_with_sample_weight(X_train, y_train)
 
@@ -219,6 +242,7 @@ class QualityPredictor:
             "model_type": self.model_type,
             "threshold_metric": ML_CONFIG.get("threshold_metric", "f1"),
             "random_state": ML_CONFIG["random_state"],
+            "split_strategy": split_strategy,
         }
 
         logger.info("Optimized threshold: %.4f", self.threshold)
@@ -327,7 +351,9 @@ class QualityPredictor:
         self.model = self.model_manager.load_model(filepath)
 
 
-def run_quality_prediction(df: Optional[pd.DataFrame] = None) -> Dict[str, Any]:
+def run_quality_prediction(
+    df: Optional[pd.DataFrame] = None, *, return_artifacts: bool = False
+) -> Union[Dict[str, Any], Tuple[Dict[str, Any], QualityPredictor, pd.DataFrame]]:
     print("=== 품질 예측 모델 학습 ===")
 
     if df is None:
@@ -371,6 +397,10 @@ def run_quality_prediction(df: Optional[pd.DataFrame] = None) -> Dict[str, Any]:
     ):
         print(f"  {feature}: {value:.4f}")
 
+    if return_artifacts:
+        # X_test retains the source DataFrame index, which lets the caller
+        # connect held-out predictions to the exact persisted observation.
+        return metrics, predictor, X_test
     return metrics
 
 
