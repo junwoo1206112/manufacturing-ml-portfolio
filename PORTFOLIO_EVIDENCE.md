@@ -38,4 +38,4 @@ The expected final command output is `750` for this recorded execution. Re-runni
 
 - The data and drift scenario are synthetic; the metrics are not claims about a production line.
 - Flask's development server and SQLite are intentional for this local portfolio demo. This project does not claim a production deployment, authentication layer, or production database.
-- [`requirements-tested.txt`](requirements-tested.txt) records the exact runtime versions tested for this evidence. `requirements.txt` remains the editable minimum-specification input for dependency maintenance.
+- [`requirements-tested.txt`](requirements-tested.txt) records the exact runtime versions tested for this evidence; `requirements.txt`, Docker, and CI all install that same snapshot.
