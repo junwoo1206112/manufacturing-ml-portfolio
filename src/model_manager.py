@@ -55,9 +55,12 @@ class ModelManager:
         with open(meta_path, "w", encoding="utf-8") as f:
             json.dump(meta, f, indent=2, ensure_ascii=False)
 
-        shutil.copy2(model_path, LATEST_MODEL_PATH)
-        shutil.copy2(meta_path, LATEST_MODEL_META_PATH)
-        logger.info("Latest model alias updated: %s", LATEST_MODEL_PATH)
+        # Isolated managers are used by tests and experiments. They must not
+        # overwrite the portfolio's production-quality latest aliases.
+        if self.model_dir.resolve() == MODELS_DIR.resolve():
+            shutil.copy2(model_path, LATEST_MODEL_PATH)
+            shutil.copy2(meta_path, LATEST_MODEL_META_PATH)
+            logger.info("Latest model alias updated: %s", LATEST_MODEL_PATH)
 
         logger.info("Model saved: %s", model_path)
         return str(model_path)

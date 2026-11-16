@@ -3,8 +3,8 @@
 `python main.py`가 SQLite의 최신 test 지표를 조회하여 자동 생성한 문서입니다.
 합성 데이터의 시간순 held-out test split 결과이며 실제 생산 성능을 뜻하지 않습니다.
 
-- 모델: `quality_predictor` / 버전: `20261116_203322`
-- 학습 시각 (UTC): `2026-11-16T20:33:22.639048`
+- 모델: `quality_predictor` / 버전: `20261116_230743`
+- 학습 시각 (UTC): `2026-11-16T23:07:43.208996`
 - 예측 threshold: `0.4700`
 - test 지표:
   - `accuracy`: `0.7333`
