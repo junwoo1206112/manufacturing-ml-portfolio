@@ -20,6 +20,8 @@ Smart Manufacturing Dashboard API는 제조 공정 데이터를 분석하고 시
 | GET | `/api/v1/rul` | 잔여 수명 예측 |
 | GET | `/api/v1/visualizations` | 시각화 파일 목록 |
 | GET | `/api/v1/drift` | 데이터 드리프트 감지 결과 |
+| GET | `/api/v1/history/models/latest/metrics` | 최신 모델의 held-out test 지표와 threshold |
+| GET | `/api/v1/history/predictions?from=&to=&line=` | 일자·라인별 held-out test 예측 불량 건수 |
 
 ### GET /api/v1/summary
 

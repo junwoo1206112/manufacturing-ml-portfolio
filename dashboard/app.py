@@ -5,16 +5,18 @@ import json
 import os
 import sys
 import time
+from datetime import date
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
-from flask import Flask, jsonify, render_template, send_from_directory
+from flask import Flask, jsonify, render_template, request, send_from_directory
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.config import DATA_CONFIG, DASHBOARD_CONFIG, DATA_FILE, EQUIPMENT_FILE, VISUALIZATIONS_DIR
+from src.config import DATA_CONFIG, DASHBOARD_CONFIG, DATA_FILE, EQUIPMENT_FILE, VISUALIZATIONS_DIR, HISTORY_DATABASE_PATH, PRODUCTION_LINES
+from src.history_repository import HistoryRepository
 from src.logging_config import setup_logging
 from src.data_generator import generate_manufacturing_data
 from src.anomaly_detector import detect_anomalies
@@ -60,6 +62,8 @@ class DataCache:
 
 
 cache = DataCache(ttl=60)
+history = HistoryRepository(HISTORY_DATABASE_PATH)
+history.initialize()
 
 
 def load_equipment():
@@ -228,9 +232,62 @@ def api_drift():
 
         detector = DriftDetector()
         report = detector.detect(df, live_df)
+        report["source_mode"] = "simulated"
+        report["source_note"] = "합성 데이터에 의도적으로 변화시킨 데모 시나리오입니다. 실제 스트리밍 데이터가 아닙니다."
         return jsonify({"status": "success", "data": report})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route("/api/v1/history/quality")
+def api_history_quality():
+    try:
+        date_from, date_to, line = request.args.get("from"), request.args.get("to"), request.args.get("line")
+        if date_from:
+            date.fromisoformat(date_from)
+        if date_to:
+            date.fromisoformat(date_to)
+        if line and line not in PRODUCTION_LINES:
+            raise ValueError("line must be a configured production line")
+        return jsonify({"status": "success", "data": history.quality_by_day(
+            date_from=date_from, date_to=date_to, line=line)})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
+
+
+@app.route("/api/v1/history/models")
+def api_history_models():
+    try:
+        limit = min(max(int(request.args.get("limit", 10)), 1), 100)
+        return jsonify({"status": "success", "data": history.latest_models(limit)})
+    except (ValueError, TypeError):
+        return jsonify({"status": "error", "message": "limit must be an integer between 1 and 100"}), 400
+
+
+@app.route("/api/v1/history/models/latest/metrics")
+def api_history_latest_model_metrics():
+    return jsonify({"status": "success", "data": history.latest_model_metrics()})
+
+
+@app.route("/api/v1/history/predictions")
+def api_history_predictions():
+    try:
+        date_from, date_to, line = request.args.get("from"), request.args.get("to"), request.args.get("line")
+        if date_from:
+            date.fromisoformat(date_from)
+        if date_to:
+            date.fromisoformat(date_to)
+        if line and line not in PRODUCTION_LINES:
+            raise ValueError("line must be a configured production line")
+        return jsonify({"status": "success", "data": history.predicted_defects_by_day(
+            date_from=date_from, date_to=date_to, line=line)})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
+
+
+@app.route("/api/v1/history/drift/latest")
+def api_history_latest_drift():
+    return jsonify({"status": "success", "data": history.latest_drift()})
 
 
 if __name__ == "__main__":

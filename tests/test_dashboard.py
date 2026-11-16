@@ -81,7 +81,19 @@ class TestDashboardAPI:
         assert "drift_detected" in data["data"]
         assert "drifted_features" in data["data"]
         assert len(data["data"]["drifted_features"]) >= 6
+        assert data["data"]["source_mode"] == "simulated"
 
     def test_serve_visualization(self):
         resp = self.client.get("/visualizations/nonexistent.png")
         assert resp.status_code in (404, 200)
+
+    def test_history_api_contracts(self):
+        assert self.client.get("/api/v1/history/quality").status_code == 200
+        assert self.client.get("/api/v1/history/quality?from=bad-date").status_code == 400
+        assert self.client.get("/api/v1/history/quality?line=unknown").status_code == 400
+        assert self.client.get("/api/v1/history/models?limit=not-an-int").status_code == 400
+        assert self.client.get("/api/v1/history/models/latest/metrics").status_code == 200
+        assert self.client.get("/api/v1/history/predictions").status_code == 200
+        assert self.client.get("/api/v1/history/predictions?from=bad-date").status_code == 400
+        assert self.client.get("/api/v1/history/predictions?line=unknown").status_code == 400
+        assert self.client.get("/api/v1/history/drift/latest").status_code == 200

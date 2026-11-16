@@ -81,10 +81,15 @@ class DriftDetector:
                 results[col] = {"psi": 0.0, "drifted": False}
                 continue
 
-            all_vals = np.concatenate([ref_vals, live_vals])
-            bins = np.percentile(all_vals, np.linspace(0, 100, n_bins + 1))
-            bins[0] = -np.inf
-            bins[-1] = np.inf
+            # Bins are fitted from the reference period only.  Including the
+            # live batch moves the baseline and dilutes the very drift being
+            # measured.
+            bins = np.unique(np.percentile(ref_vals, np.linspace(0, 100, n_bins + 1)))
+            if len(bins) < 2:
+                bins = np.array([-np.inf, np.inf])
+            else:
+                bins[0] = -np.inf
+                bins[-1] = np.inf
 
             ref_counts, _ = np.histogram(ref_vals, bins=bins)
             live_counts, _ = np.histogram(live_vals, bins=bins)

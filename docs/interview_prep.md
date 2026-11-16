@@ -11,7 +11,7 @@
 4. **예측 정비**: 설비 건강 점수 및 잔여 수명(RUL) 추정
 5. **실시간 대시보드**: Flask + Chart.js 기반 모니터링
 
-기술적으로 Python, Scikit-learn, Flask를 사용했고, RandomForest에 class_weight balanced와 validation-set 기반 threshold tuning을 적용하여 불량 클래스 F1-score 약 0.59, AUC-ROC 약 0.85 수준의 성능을 달성했습니다."
+기술적으로 Python, Scikit-learn, Flask를 사용했고, RandomForest에 class_weight balanced와 validation-set 기반 threshold tuning을 적용했습니다. 합성 데이터의 시간순 test split 대표 실행에서 불량 클래스 F1-score 0.7519, AUC-ROC 0.8121, PR-AUC 0.7692를 기록했습니다."
 
 ## 프로젝트 소개 (3분 버전)
 
@@ -35,7 +35,7 @@
 - **인프라**: Docker containerization, GitHub Actions CI
 
 **성과:**
-- 불량 클래스 F1-score ~0.59, AUC-ROC ~0.85, AUC-PR ~0.66
+- 불량 클래스 F1-score 0.7519, AUC-ROC 0.8121, AUC-PR 0.7692 (2026-11-16 대표 실행)
 - SHAP 특성 중요도 시각화 (temperature, vibration가 주요 변수)
 - 드리프트 감지로 온도 +2°C shift와 진동 ×1.3 scale 변화 탐지 성공
 - 클래스 불균형, 임계값 최적화, 드리프트 등 실무 이슈 명시적 처리
@@ -55,7 +55,7 @@ A: RandomForest를 선택한 이유는 3가지입니다:
 
 A: 제조 데이터는 불량률이 낮아(보통 5~15%) 클래스 불균형이 발생합니다.
 저희는 다음 방법을 적용했습니다:
-1. **Stratified Split**: 학습/검증/테스트 분할 시 클래스 비율 유지
+1. **Chronological Split**: 타임스탬프가 있는 데이터는 과거 70% / 검증 15% / 미래 test 15% 순서로 분할
 2. **class_weight='balanced'**: 소수 클래스에 자동 가중치 부여
 3. **Threshold Tuning**: 검증 세트에서 F1-score를 최대화하는 확률 임계값 선택
 4. **AUC-PR**: 불균형 데이터에 적합한 평가 지표 활용
@@ -93,15 +93,15 @@ A: **데이터 시뮬레이션의 현실화**가 가장 어려웠습니다.
 2. 진동의 설비 피로 누적을 시뮬레이션했으며
 3. 공정별(전자부품, 기계부품, 소비재)로 상이한 센서 범위를 설정했습니다.
 
-두 번째 과제는 **클래스 불균형**이었습니다. 초기 모델의 불량 F1이 0에 가까웠으나, Stratified Split과 threshold tuning을 도입하면서 F1 ~0.59까지 개선했습니다.
+두 번째 과제는 **클래스 불균형**이었습니다. `class_weight='balanced'`와 validation 기반 threshold tuning을 적용했고, 시간순 test split 대표 실행에서 불량 F1 0.7519를 기록했습니다.
 
 ### Q: 성과는 어떻게 측정했나요?
 
 A: 불균형 데이터에서는 accuracy만으로 성능을 판단할 수 없어 다음 지표를 함께 사용했습니다:
 1. **Precision/Recall/F1**: 정상/불량 클래스별 및 매크로 평균
-2. **AUC-ROC**: 모델의 전반적인 분류 성능 (현재 ~0.85)
-3. **AUC-PR**: 불균형 데이터에서의 신뢰도 평가 (현재 ~0.66)
-4. **Accuracy**: 참고 지표로만 활용 (현재 ~0.82)
+2. **AUC-ROC**: 모델의 전반적인 분류 성능 (대표 실행 0.8121)
+3. **AUC-PR**: 불균형 데이터에서의 신뢰도 평가 (대표 실행 0.7692)
+4. **Accuracy**: 참고 지표로만 활용 (대표 실행 0.7333)
 
 제조 현장에서는 Recall(재현율)이 중요합니다. 불량을 놓치면 큰 비용이 발생하기 때문입니다. threshold tuning 시 F1을 기본 메트릭으로 사용하되, trade-off를 설명할 수 있어야 합니다.
 
