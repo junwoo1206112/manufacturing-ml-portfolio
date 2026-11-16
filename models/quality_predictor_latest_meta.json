@@ -1,9 +1,9 @@
 {
   "name": "quality_predictor",
-  "version": "20261116_203322",
-  "saved_at": "2026-11-16T20:33:22.639048",
+  "version": "20261116_230743",
+  "saved_at": "2026-11-16T23:07:43.208996",
   "model_type": "random_forest",
-  "model_path": "C:\\AI\\manufacturing-ml-portfolio\\models\\quality_predictor_v20261116_203322.joblib",
+  "model_path": "C:\\AI\\manufacturing-ml-portfolio\\models\\quality_predictor_v20261116_230743.joblib",
   "schema_version": "2.0",
   "feature_columns": [
     "temperature",

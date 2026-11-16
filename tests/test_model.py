@@ -164,8 +164,12 @@ class TestModelManager:
     def setup_method(self):
         self.manager = ModelManager()
 
-    def test_save_and_load(self):
+    def test_save_and_load(self, monkeypatch, tmp_path):
         from sklearn.ensemble import RandomForestClassifier
+        import src.model_manager as model_manager_module
+
+        monkeypatch.setattr(model_manager_module, "LATEST_MODEL_PATH", tmp_path / "global_latest.joblib")
+        monkeypatch.setattr(model_manager_module, "LATEST_MODEL_META_PATH", tmp_path / "global_latest_meta.json")
         model = RandomForestClassifier(n_estimators=10, random_state=42)
         model.fit(np.random.rand(100, 5), np.random.randint(0, 2, 100))
 
@@ -174,6 +178,7 @@ class TestModelManager:
             path = manager.save_model(model, "test")
             loaded = manager.load_model(path)
             assert loaded is not None
+            assert not (tmp_path / "global_latest.joblib").exists()
 
     def test_list_models(self):
         models = self.manager.list_models()
