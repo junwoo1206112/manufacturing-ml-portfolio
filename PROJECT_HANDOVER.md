@@ -7,7 +7,7 @@
 기술적 변경을 이어갈 때는 다음을 먼저 실행합니다.
 
 ```powershell
-pip install -r requirements-tested.txt
+pip install -r requirements.txt
 pytest -q
 python main.py
 docker compose up --build -d

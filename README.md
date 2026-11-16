@@ -116,7 +116,7 @@ flowchart LR
 ```
 manufacturing-simulation-portfolio/
 ├── README.md
-├── requirements.txt                 # 유지보수용 최소 버전 명세
+├── requirements.txt                 # 정확 버전 런타임 진입점
 ├── requirements-tested.txt          # 검증된 정확한 런타임 버전
 ├── PORTFOLIO_EVIDENCE.md            # 면접용 최신 실행 증빙
 ├── main.py                          # 전체 파이프라인
@@ -289,7 +289,7 @@ manufacturing-simulation-portfolio/
 
 ## 재현성·실행 경계
 
-`requirements-tested.txt`는 2026-11-16에 테스트와 Docker 검증에 사용한 정확한 런타임 직접 의존성 버전입니다. 포트폴리오 재현은 이 파일을 사용하고, 의존성 갱신 작업은 범위 제약이 있는 `requirements.txt`에서 시작합니다. 검증 근거는 [PORTFOLIO_EVIDENCE.md](PORTFOLIO_EVIDENCE.md)에 통합합니다.
+`requirements.txt`는 `requirements-tested.txt`의 2026-11-16 정확한 런타임 직접 의존성 버전을 참조합니다. Docker와 GitHub Actions도 같은 경로를 사용하므로, 로컬·컨테이너·CI가 동일한 패키지 버전에서 실행됩니다. 검증 근거는 [PORTFOLIO_EVIDENCE.md](PORTFOLIO_EVIDENCE.md)에 통합합니다.
 
 대시보드는 Flask 개발 서버로 제공하는 **로컬·합성 데이터 데모**입니다. 운영 배포를 주장하지 않으므로 Gunicorn, 인증, 운영 DB를 이번 범위에 추가하지 않습니다.
 
