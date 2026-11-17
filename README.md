@@ -3,6 +3,9 @@
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+🌐 **[라이브 데모 열기](https://smart-manufacturing-ml-demo.onrender.com/)**  
+합성 데이터 기반 공개 대시보드입니다. 무료 인스턴스는 유휴 상태 뒤 첫 접속 시 기동에 최대 약 1분이 걸릴 수 있습니다.
+
 ## 20초 요약
 
 > **문제** — 합성 제조 센서 데이터에서 불량 조기 탐지와 공정 이상 모니터링을 재현했습니다.
