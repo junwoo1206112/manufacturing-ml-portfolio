@@ -4,5 +4,5 @@ services:
     runtime: docker
     plan: free
     autoDeploy: true
-    dockerCommand: sh -c 'python dashboard/app.py ${PORT:-5000}'
+    dockerCommand: python dashboard/app.py $PORT
     healthCheckPath: /
