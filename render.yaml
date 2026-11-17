@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: smart-manufacturing-ml-demo
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    dockerCommand: sh -c 'python dashboard/app.py ${PORT:-5000}'
+    healthCheckPath: /
