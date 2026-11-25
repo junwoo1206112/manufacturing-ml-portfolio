@@ -7,6 +7,9 @@
 🌐 **[라이브 데모 열기](https://smart-manufacturing-ml-demo.onrender.com/)**  
 합성 데이터 기반 공개 대시보드입니다. 무료 인스턴스는 유휴 상태 뒤 첫 접속 시 기동에 최대 약 1분이 걸릴 수 있습니다.
 
+🎬 **[시연 영상 보기](https://github.com/junwoo1206112/manufacturing-ml-portfolio/releases/tag/portfolio-demo-v1)**  
+46초 분량으로 대시보드의 공정 모니터링·모델 성능·드리프트 화면을 확인할 수 있습니다.
+
 ## 20초 요약
 
 > **문제** — 합성 제조 센서 데이터에서 불량 조기 탐지와 공정 이상 모니터링을 재현했습니다.
@@ -95,7 +98,7 @@ flowchart LR
 - **Visualization**: Matplotlib, Seaborn, Chart.js
 - **Web**: Flask, Bootstrap
 - **Infrastructure**: Docker, docker-compose, GitHub Actions
-- **Testing**: pytest (78 tests)
+- **Testing**: pytest (86 tests)
 
 ---
 
