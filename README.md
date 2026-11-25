@@ -1,5 +1,6 @@
 # Smart Manufacturing ML Portfolio
 
+[![CI](https://github.com/junwoo1206112/manufacturing-ml-portfolio/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/junwoo1206112/manufacturing-ml-portfolio/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
